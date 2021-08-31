@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>The Letters of William Ellery Channing</title>
+  <link href="./src/css/style.css" type="text/css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,100;0,200;0,300;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <link href="./vendor/diva-v6.0.0/diva.css" type="text/css" rel="stylesheet" />
+
+  <!-- Used for a workaround to create a parallax via a pseudo element
+       Since JS can not access pseudo elements, CSS is directly written into
+       this style element instead. -->
+  <style id="parallaxBackground"></style>
+</head>
+<body>
+
+  <!-- CONTENT -->
+  <header>
+    <h1>The Letters of <span>William Ellery Channing</span></h1>
+    <nav>
+      <a id="searchButton" href="https://curiosity.lib.harvard.edu/william-ellery-channing">See library holdings</a>
+      <button id="playButton">&#9654; Play</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <div id="overlay">
+      <h1>The Letters of <span>William Ellery Channing</span></h1>
+      <div id="overlayFooter">
+        <p>This visualization lets you track the chronology of William's life, read the original letters he wrote and received, and learn about the persons that were important to him.<br /><br />
+            Clicking on anything that seems interesting to you will adjust the content of the visualization - have fun exploring!</p>
+        <button id="arrowDown">&#x2193;</button>
+      </div>
+    </div>
+
+    <p id="year"></p>
+
+    <div id="documentViewer">
+      <div id="diva-wrapper"></div>
+      <div class="zoomSliderContainer">
+        <p>-</p><input class="slider zoomSlider" type="range" min="0" max="4" value="1" step="1"><p>+</p>
+      </div>
+    </div>
+
+    <!--<div id="searchContainer">
+      <div id="include_keywordSearch"></div>
+      <div class="results">
+        <div class="resultsList"></div>
+      </div>
+    </div>-->
+
+    <section class="documents">
+      <h2>Browse all <span>letters</span></h2>
+      <p class="explanation">Click on the image to read the letter.</p>
+      <div class="documentsContainer"></div>
+    </section><!--
+
+    --><section class="visualization">
+
+      <h2>Explore the <span>contacts</span></h2>
+      <p class="explanation">Select persons or connections to filter.</p>
+
+      <div class="visualizationContainer">
+        <svg id="visualization"></svg>
+      </div>
+    </section><!--
+
+    --><section class="info">
+      <h2>Get more <span>information</span></h2>
+      <p class="explanation">Click on the image to filter or read more.</p>
+      <div class="infoPersons"></div>
+    </section>
+
+    <section class="filters">
+      <h2>Manage your <span>filters</span></h2>
+      <div class="activeFilters">
+        <button id="filterYear"></button>
+        <div class="colors">
+          <div class="color" id="filterFamily"><div id="cyan"></div><p>Family</p></div>
+          <div class="color" id="filterGroups"><div id="pink"></div><p>Groups</p></div>
+          <div class="color" id="filterPersons"><div id="yellow"></div><p>Persons</p></div>
+        </div>
+        <button id="filterPersons"></button>
+      </div>
+
+      <!--<div class="legend">
+        <h3>Stroke Intensity - Letter Amount</h3>
+        <div class="intensity"><div id="string"></div></div>
+      </div>-->
+    </section>
+
+    <section class="yearsSliderContainer">
+      <h2>Travel through <span>time</span></h2>
+      <div class="yearsContentContainer"></div>
+      <div class="yearsSliderInner">
+        <input class="slider yearsSlider" type="range" min="0" max="0" value="0" step="1">
+      </div>
+    </section>
+  </main>
+
+
+
+  <!-- TEMPLATES -->
+  <template id="resultsItemTemplate">
+    <div class="resultsItem">
+      <h2 class="title"></h2>
+      <p class="author"></p>
+    </div>
+  </template>
+
+  <template id="keywordSearchTemplate">
+    <div class="search">
+      <input class="searchField" type="text" />
+      <button class="searchButton">Search</button>
+      <br /><p class="resultsMetadata"></p>
+    </div>
+  </template>
+
+  <template id="filtersContainerTemplate">
+    <div class="filters">
+      <div class="filtersHeader">
+        <h2>Filter</h2>
+      </div>
+      <div class="filtersContent">No filters available at the moment.</div>
+    </div>
+  </template>
+
+  <template id="filterTemplate">
+    <div class="filter">
+      <h3 class="filterHeader"></h3>
+      <button class="filterRemove">remove filter</button>
+      <ul class="filterContent"></ul>
+    </div>
+  </template>
+
+  <template id="personTemplate">
+    <div class="infoPerson" person-id="">
+      <div class="imageContainer">
+        <img src="./src/img/persons/unknown.png" />
+      </div>
+      <div>
+        <h3></h3>
+        <p></p>
+      </div>
+    </div>
+  </template>
+
+  <template id="documentTemplate">
+    <div class="document" data-id="">
+      <div class="documentMetadata">
+        <h3></h3>
+        <p></p>
+      </div>
+      <div class="documentImageContainer">
+        <div class="documentImage"></div>
+      </div>
+    </div>
+  </template>
+
+
+
+  <!-- SCRIPTS -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <script src="./vendor/diva-v6.0.0/diva.js"></script>
+  <script src="./vendor/diva-v6.0.0/plugins/download.js"></script>
+  <script src="./vendor/diva-v6.0.0/plugins/manipulation.js"></script>
+  <script src="./vendor/diva-v6.0.0/plugins/metadata.js"></script>
+
+  <script src="./src/js/app.js" type="module"></script>
+  <script src="./src/js/modules/viewer/app.js"></script>
+
+</body>
+</html>
