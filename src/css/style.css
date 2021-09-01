@@ -80,6 +80,10 @@ div#overlay h1 {
   font-weight: 300;
   font-style: italic;
   transition: all .7s ease-out;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 
 div#overlay h1 span {
@@ -101,8 +105,7 @@ div#overlay h1.placed {
 
 div#overlay div#overlayFooter {
   width: 100%;
-  position: fixed;
-  bottom: 21vh;
+  margin-top: 5em;
   text-align: center;
 }
 
@@ -111,29 +114,22 @@ div#overlay div#overlayFooter p {
 }
 
 div#overlay button#arrowDown {
-  width: 100%;
-  border: none;
-  display: block;
-  position: fixed;
-  bottom: 5vh;
-  font-size: 4em;
+  padding: 0.5em 1.5em 0.4em 1.5em;
+  border: 1px solid #f4f4f5;
+  margin-top: 2em;
+  border-radius: 2em;
+  display: inline-block;
+  font-size: 0.85em;
+  font-family: "Josefin Sans", Helvetica, sans-serif;
+  color: #f4f4f5;
   background: none;
-  animation: bounce 5s ease-out 0s infinite;
-  text-shadow: -2px -2px 15px rgba(23, 29, 39, 0.15), 2px -2px 15px rgba(23, 29, 39, 0.15),
-  -2px 2px 15px rgba(23, 29, 39, 0.15), 2px 2px 15px rgba(23, 29, 39, 0.15);
 }
 
-div#overlay button#arrowDown:hover {
+div#overlay button#arrowDown:hover,
+div#overlay button#arrowDown:focus {
+  color: #0f141a;
+  background: #f4f4f5;
   cursor: pointer;
-}
-
-@keyframes bounce {
-  0% {bottom: 5vh;}
-  75% {bottom: 5vh;}
-  85% {bottom: 10vh;}
-  90% {bottom: 5vh;}
-  95% {bottom: 7vh;}
-  100% {bottom: 5vh;}
 }
 
 /*** HEADER***/
@@ -151,6 +147,7 @@ header h1 {
   font-size: 0.85em;
   font-weight: 300;
   font-style: italic;
+  text-decoration: none;
 }
 
 h1 span {
@@ -176,7 +173,7 @@ header nav button, header nav a {
 }
 
 header nav button {
-  margin: 0.3em 1em;
+  margin: 0.3em 0.6em;
   border: 1px solid #f4f4f5;
   border-radius: 2em;
 }
@@ -185,6 +182,15 @@ header nav button:hover, header nav button:focus {
   cursor: pointer;
   color: #0F141A;
   background: #f4f4f5;
+}
+
+header nav button#arrowUp {
+  border: none;
+}
+
+header nav button#arrowUp:hover, header nav button#arrowUp:focus {
+  color: #f4f4f5;
+  background: none;
 }
 
 
@@ -525,7 +531,7 @@ path.letterOut {
 }
 
 .yearsSliderInner {
-  margin-top: -10px;
+  margin-top: -4px;
 }
 
 .yearsContentContainer {
@@ -541,7 +547,7 @@ path.letterOut {
   display: inline-block;
   position: absolute;
   bottom: 0;
-  background: rgba(124, 124, 125, 0.6);
+  background: rgba(224, 224, 225, 0.75);
 }
 
 .yearsSliderContainer .yearContent p {
@@ -615,6 +621,7 @@ div.document .documentImageContainer {
   height: 5.5em;
   padding: 0;
   border: 3px solid;
+  border-color: #3e4c65;
   border-radius: 50%;
   vertical-align: middle;
 }

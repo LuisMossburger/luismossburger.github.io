@@ -651,7 +651,6 @@ class Visualization {
           this.documentTemplate.content.querySelector(".document h3").innerHTML = this.data["links"][i]["source"] + " &rarr; " + this.data["links"][i]["target"];
           this.documentTemplate.content.querySelector(".document p").innerHTML = this.data["links"][i]["Title"];
           this.documentTemplate.content.querySelector(".documentImage").style.backgroundImage =  "url('./src/img/docs/" + this.data["links"][i]["ID"] + ".jpg')";
-          this.documentTemplate.content.querySelector(".documentImageContainer").style.borderColor =  this.colorNodes(this.data["links"][i]["target"]);
 
           this.documentsContainer.appendChild(document.importNode(documentTemplate.content, true));
           document.querySelector(".document[data-id='" + this.data["links"][i]["ID"] + "']").addEventListener("click", function() { showDocument(that.data["links"][i]["ID"]); });

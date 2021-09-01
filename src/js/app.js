@@ -82,18 +82,19 @@ function registerAnimations() {
 
   // Reveal visualization on arrow click or scroll
   document.querySelector("#overlay #arrowDown").addEventListener("click", revealVisualization);
-  document.addEventListener("mousewheel", revealVisualization);
-  document.addEventListener("DOMMouseScroll", revealVisualization);
+  document.querySelector("header #arrowUp").addEventListener("click", revealStart);
 }
 
 function revealVisualization() {
   document.querySelector("#overlay").classList.add("placed");
   setTimeout(function() {
-    document.querySelector("#overlay").style.display = "none";
+    document.querySelector("#overlay").style.visibility = "hidden";
   }, 1500);
+}
 
-  document.removeEventListener("mousewheel", revealVisualization);
-  document.removeEventListener("DOMMouseScroll", revealVisualization);
+function revealStart() {
+  document.querySelector("#overlay").style.visibility = "visible";
+  document.querySelector("#overlay").classList.remove("placed");
 }
 
 init();
