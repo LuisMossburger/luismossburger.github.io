@@ -583,8 +583,8 @@ path.letterOut {
 /* PERSONS */
 div.infoPersons, div.documentsContainer {
   margin-top: 1em;
-  max-height: 35vh;
-  height: 35vh;
+  max-height: 45vh;
+  height: 45vh;
   margin-bottom: 3.5em;
   overflow-y: scroll;
   overflow-x: hidden;
