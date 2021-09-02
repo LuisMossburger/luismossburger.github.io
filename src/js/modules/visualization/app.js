@@ -92,12 +92,12 @@ class Visualization {
   init() {
     // Use "self" here because of context problems when this function is
     // passed as a callback
-    self.changeData("all");
     self.setupFilters();
-    self.render();
+    self.changeData("all");
   }
 
   render() {
+    this.data = this.sortNodes(this.data);
     this.numNodes = this.data["nodes"].length;
 
     // Calculate positions for a circle structure
@@ -110,7 +110,6 @@ class Visualization {
 
     this.setupYears();
     this.renderLetters();
-    this.renderPersons();
   }
 
   setupFilters() {
@@ -214,11 +213,10 @@ class Visualization {
 
   // Render Nodes
   renderNodes(links) {
-    var that = this, // Helper to pass context functions to d3
-        catData = this.sortNodes(this.data);
+    var that = this; // Helper to pass context functions to d3
 
     var nodes = this.svg.selectAll("circle")
-        .data(catData["nodes"])
+        .data(this.data["nodes"])
         .enter()
           .append("circle") // One circle per element
             .attr("r", 4)
