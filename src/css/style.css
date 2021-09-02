@@ -113,7 +113,7 @@ div#overlay div#overlayFooter p {
   padding: 0 30%;
 }
 
-div#overlay button#arrowDown {
+div#overlay button#arrowDown, #aboutWrapper button, #helpWrapper button {
   padding: 0.5em 1.5em 0.4em 1.5em;
   border: 1px solid #f4f4f5;
   margin-top: 2em;
@@ -126,7 +126,11 @@ div#overlay button#arrowDown {
 }
 
 div#overlay button#arrowDown:hover,
-div#overlay button#arrowDown:focus {
+div#overlay button#arrowDown:focus,
+#aboutWrapper button:focus,
+#aboutWrapper button:hover,
+#helpWrapper button:focus,
+#helpWrapper button:hover {
   color: #0f141a;
   background: #f4f4f5;
   cursor: pointer;
@@ -136,13 +140,12 @@ div#overlay button#arrowDown:focus {
 header {
   width: 100%;
   height: 2.6em;
-  padding: 0.3em 0;
+  padding: 0.5em 1em;
   color: #f4f4f5;
   background: #0F141A;
 }
 
 header h1 {
-  margin-left: 1em;
   display: inline-block;
   font-size: 0.85em;
   font-weight: 300;
@@ -172,8 +175,8 @@ header nav button, header nav a {
   background: none;
 }
 
-header nav button {
-  margin: 0.3em 0.6em;
+header nav button#playButton {
+  margin-left: 1em;
   border: 1px solid #f4f4f5;
   border-radius: 2em;
   font-family: "Josefin Sans", Helvetica, sans-serif;
@@ -181,17 +184,11 @@ header nav button {
 
 header nav button:hover, header nav button:focus {
   cursor: pointer;
+}
+
+header nav button#playButton:hover, header nav button#playButton:focus {
   color: #0F141A;
   background: #f4f4f5;
-}
-
-header nav button#arrowUp {
-  border: none;
-}
-
-header nav button#arrowUp:hover, header nav button#arrowUp:focus {
-  color: #f4f4f5;
-  background: none;
 }
 
 
@@ -745,6 +742,52 @@ div.document p {
   display: block;
 }
 
+/*** ABOUT ***/
+#aboutWrapper, #helpWrapper {
+  width: 100%;
+  height: 100vh;
+  padding: 9vh 20%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  z-index: 15;
+  overflow-y: auto;
+  background: rgba(23, 29, 39, 0.85);
+}
+
+#aboutWindow, #helpWindow {
+  width: 100%;
+  padding: 3em;
+  text-align: center;
+  z-index: 20;
+}
+
+#aboutWrapper h1, #helpWrapper h1 {
+  font-size: 1.3em;
+  font-weight: 300;
+  font-style: italic;
+}
+
+#aboutWrapper h1 span, #helpWrapper h1 span {
+  padding-top: 0.15em;
+  display: block;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.6em;
+  font-style: normal;
+}
+
+#aboutWrapper p, #helpWrapper p {
+  margin-top: 3em;
+  line-height: 1.5;
+}
+
+#aboutWrapper p, #aboutWrapper a,
+#helpWrapper p, #helpWrapper a {
+  color: #f4f4f5;
+}
+
 /*** DIVA ADJUSTMENTS ***/
 #documentViewer {
   width: 100%;
@@ -761,14 +804,18 @@ div.document p {
 
 #documentCloser {
   font-family: "Josefin Sans", Helvetica, sans-serif;
-  font-size: 3em;
+  font-size: 1.8em;
   position: absolute;
   right: 0.5em;
   top: 0.5em;
   margin: 0;
-  color: #E34A6F;
   background: none;
   border: none;
+}
+
+#documentCloser > span {
+  color: #E34A6F;
+  font-family: "Josefin Sans", Helvetica, sans-serif;
 }
 
 #documentCloser:hover {

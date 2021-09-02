@@ -18,8 +18,10 @@
 
   <!-- CONTENT -->
   <header>
-    <a href="./"><h1>The Letters of <span>William Ellery Channing</span></h1></>
+    <a href="./"><h1>The Letters of <span>William Ellery Channing</span></h1></a>
     <nav>
+      <button id="helpButton">Help</button>
+      <button id="aboutButton">About</button>
       <a id="searchButton" href="https://curiosity.lib.harvard.edu/william-ellery-channing">Collection at Harvard Library</a>
       <button id="playButton">&#9654; Play</button>
     </nav>
@@ -44,7 +46,29 @@
       <div class="zoomSliderContainer">
         <p>-</p><input class="slider zoomSlider" type="range" min="0" max="4" value="1" step="1"><p>+</p>
       </div>
-      <button id="documentCloser" onclick="this.parentElement.style.display = 'none';">X</button>
+      <button id="documentCloser" onclick="this.parentElement.style.display = 'none';"><span>X</span> Close</button>
+    </div>
+
+    <div id="aboutWrapper">
+      <div id="aboutWindow">
+        <h1>The Letters of <span>William Ellery Channing</span></h1>
+        <p>is an interactive data visualization about William Ellery Channing with documents and data from <a href="https://library.harvard.edu/">Harvard Library</a>. It is an examplary approach to visualize library collections in an interesting and useful way beyond the classic library catalogue. The visualization was developed by <a href="https://twitter.com/luisinanutshell">Luis Moßburger</a> during his master's thesis at the University of Regensburg in collaboration with the <a href="https://urc.library.harvard.edu/">User Research Center</a> at Harvard.<br /><br />Feedback is always warmly welcome - if you want to share your thoughts or learn more, feel free to reach out and share your thoughts via <a href="https://twitter.com/luisinanutshell">Twitter</a> or <a href="mailto:lmossburger@t-online.de">e-mail</a>!</p>
+        <button onclick="this.parentElement.parentElement.style.display = 'none';">Back</button>
+      </div>
+    </div>
+
+    <div id="helpWrapper">
+      <div id="helpWindow">
+        <h1><span>Help</span></h1>
+        <p>This visualization has four main parts.
+          <br /><br />In the middle, you see a circle containing all persons that wrote or received letters as dots and connections between the dots, which represent letters. Click on a dot or connection to select persons you want to see letters from.
+          <br /><br />On the bottom, you see a timeline showing important dates in William's life and when the letters were written. Move the slider to select a year from which you want to see letters.
+          <br /><br />On the right, you see all persons that are relevant regarding the currently set filters. Some of them have images (that age through time) and links to Wikipedia pages.
+          <br /><br />On the left, you see all the ltters that are relevant regarding the currently set filters. Click on a letter to read it in a large viewer and learn about the content.
+
+          <br /><br /><br />Undecided what to do? Maybe try the "Play" button in the upper right corner and watch William's life play out.</p>
+        <button onclick="this.parentElement.parentElement.style.display = 'none';">Back</button>
+      </div>
     </div>
 
     <!--<div id="searchContainer">

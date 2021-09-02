@@ -25,6 +25,15 @@ function init() {
     include_keywordSearch(document.getElementById("include_keywordSearch"), keywordSearchTemplate);
   }
 
+  // Register Popups
+  document.querySelector("#aboutButton").addEventListener("click", function() {
+    document.querySelector("#aboutWrapper").style.display = "initial";
+  });
+
+  document.querySelector("#helpButton").addEventListener("click", function() {
+    document.querySelector("#helpWrapper").style.display = "initial";
+  });
+
   playButton.addEventListener("click", playLife);
   registerAnimations();
 }
