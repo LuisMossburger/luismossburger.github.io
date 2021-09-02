@@ -65,22 +65,37 @@ function playLife() {
   }
 
   if (animation == "stop" || animation == "pause") {
-    playButton.innerHTML = "&#10074;&#10074; &nbsp;Pause";
     animation = "play";
-
-    animationInterval = setInterval(function() {
-      if ((currentAnimationYear < maxAnimationYear) && (animation != "stop")) {
-        currentAnimationYear += 1;
-        yearsSlider.value = currentAnimationYear;
-        visualization.renderLettersByYear(visualization.allYears[currentAnimationYear]);
-      } else {
-        stopLife();
-      }
-    }, 600);
+    playButton.innerHTML = "&#10074;&#10074; &nbsp;Pause";
+    animationInterval = setInterval(playOneLifeYear, 800);
   } else if (animation == "play") {
+    animation = "pause";
     clearInterval(animationInterval);
     playButton.innerHTML = "&#9654; Play";
-    animation = "pause";
+  }
+}
+
+function playOneLifeYear() {
+  yearsSlider = document.querySelector(".yearsSlider");
+
+  if ((currentAnimationYear < maxAnimationYear) && (animation != "stop")) {
+    currentAnimationYear += 1;
+    yearsSlider.value = currentAnimationYear;
+    visualization.renderLettersByYear(visualization.allYears[currentAnimationYear]);
+
+    // Start faster interval for empty years
+    if (["1782", "1842", "1847", "1886"].includes(visualization.allYears[currentAnimationYear])) {
+      clearInterval(animationInterval);
+      animationInterval = setInterval(playOneLifeYear, 100)
+    }
+
+    // Start slower interval for filled years
+    if (["1802", "1846", "1884", "1898"].includes(visualization.allYears[currentAnimationYear])) {
+      clearInterval(animationInterval);
+      animationInterval = setInterval(playOneLifeYear, 800)
+    }
+  } else {
+    stopLife();
   }
 }
 
