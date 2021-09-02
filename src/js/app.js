@@ -84,7 +84,7 @@ function playOneLifeYear() {
     visualization.renderLettersByYear(visualization.allYears[currentAnimationYear]);
 
     // Start faster interval for empty years
-    if (["1782", "1842", "1847", "1886"].includes(visualization.allYears[currentAnimationYear])) {
+    if (["1782", "1842", "1848", "1886"].includes(visualization.allYears[currentAnimationYear])) {
       clearInterval(animationInterval);
       animationInterval = setInterval(playOneLifeYear, 100)
     }

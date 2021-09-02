@@ -176,6 +176,7 @@ header nav button {
   margin: 0.3em 0.6em;
   border: 1px solid #f4f4f5;
   border-radius: 2em;
+  font-family: "Josefin Sans", Helvetica, sans-serif;
 }
 
 header nav button:hover, header nav button:focus {
@@ -758,6 +759,22 @@ div.document p {
   background: rgba(23, 29, 39, 0.85);
 }
 
+#documentCloser {
+  font-family: "Josefin Sans", Helvetica, sans-serif;
+  font-size: 3em;
+  position: absolute;
+  right: 0.5em;
+  top: 0.5em;
+  margin: 0;
+  color: #E34A6F;
+  background: none;
+  border: none;
+}
+
+#documentCloser:hover {
+  cursor: pointer;
+}
+
 .diva-zoom-label, .diva-page-label, .diva-page-tools,
 .diva-goto-form, .diva-fullscreen-icon, .diva-tools {
   display: none !important;
@@ -784,8 +801,9 @@ div.document p {
   font-weight: 600 !important;
 }
 
-.diva-wrapper {
-  min-height: 80vh !important;
+#diva-wrapper, #diva-1-wrapper, #diva-1-outer {
+  min-height: 60vh !important;
+  height: 60vh !important;
 }
 
 .diva-outer {
@@ -797,7 +815,7 @@ div.document p {
 }
 
 .zoomSliderContainer {
-  margin-top: 1em;
+  margin-top: 15vh;
   text-align: center;
 }
 
