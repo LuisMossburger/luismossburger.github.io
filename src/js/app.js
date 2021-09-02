@@ -7,11 +7,16 @@ const INCLUDE_FILTERS = false;
 var keywordSearch,
     visualization;
 
+var yearsSlider,
+    animation = "stop",
+    animationInterval,
+    currentAnimationYear,
+    maxAnimationYear;
+
 var keywordSearchTemplate = document.querySelector("#keywordSearchTemplate"),
     filtersContainerTemplate = document.querySelector("#filtersContainerTemplate"),
     filterTemplate = document.querySelector("#filterTemplate"),
-    playButton = document.querySelector("#playButton"),
-    animation = false;
+    playButton = document.querySelector("#playButton");
 
 function init() {
   visualization = new Visualization();
@@ -39,31 +44,50 @@ function include_filters() {
 
 function playLife() {
 
-  if (!animation) {
-    var yearsSlider = document.querySelector(".yearsSlider"),
-        currentValue = 1,
-        endValue = yearsSlider.getAttribute("max");
+  if (visualization.filtered != "all") {
+    visualization.changeData("all");
+  }
 
-    if (visualization.filtered != "all") {
-      visualization.changeData("all");
-    }
+  yearsSlider = document.querySelector(".yearsSlider");
+  maxAnimationYear = yearsSlider.getAttribute("max");
+  yearsSlider.addEventListener("input", function() {animation = "stop";});
+  yearsSlider.addEventListener("change", function() {animation = "stop";});
 
-    playButton.innerHTML = "&#9209; &nbsp;Stop";
+  document.querySelector("#filterYear").addEventListener("click", function() {animation = "stop";});
+  document.querySelector("#filterPersons").addEventListener("click", function() {animation = "stop";});
+  document.querySelector("#filterFamily").addEventListener("click", function() {animation = "stop";});
+  document.querySelector("#filterGroups").addEventListener("click", function() {animation = "stop";});
+  document.querySelector("#filterOthers").addEventListener("click", function() {animation = "stop";});
 
-    animation = setInterval(function() {
-      if (currentValue < endValue) {
-        currentValue += 1;
-        visualization.renderLettersByYear(visualization.allYears[currentValue]);
+  // If animation was stopped, reset the timer
+  if (animation == "stop") {
+    currentAnimationYear = 1;
+  }
+
+  if (animation == "stop" || animation == "pause") {
+    playButton.innerHTML = "&#10074;&#10074; &nbsp;Pause";
+    animation = "play";
+
+    animationInterval = setInterval(function() {
+      if ((currentAnimationYear < maxAnimationYear) && (animation != "stop")) {
+        currentAnimationYear += 1;
+        yearsSlider.value = currentAnimationYear;
+        visualization.renderLettersByYear(visualization.allYears[currentAnimationYear]);
       } else {
-        playLife();
+        stopLife();
       }
     }, 600);
-  } else {
-    clearInterval(animation);
-    animation = false;
-    //visualization.changeData("all");
+  } else if (animation == "play") {
+    clearInterval(animationInterval);
     playButton.innerHTML = "&#9654; Play";
+    animation = "pause";
   }
+}
+
+function stopLife() {
+  animation = "stop";
+  clearInterval(animationInterval);
+  playButton.innerHTML = "&#9654; Play";
 }
 
 function registerAnimations() {
@@ -82,7 +106,6 @@ function registerAnimations() {
 
   // Reveal visualization on arrow click or scroll
   document.querySelector("#overlay #arrowDown").addEventListener("click", revealVisualization);
-  document.querySelector("header #arrowUp").addEventListener("click", revealStart);
 }
 
 function revealVisualization() {
@@ -90,11 +113,6 @@ function revealVisualization() {
   setTimeout(function() {
     document.querySelector("#overlay").style.visibility = "hidden";
   }, 1500);
-}
-
-function revealStart() {
-  document.querySelector("#overlay").style.visibility = "visible";
-  document.querySelector("#overlay").classList.remove("placed");
 }
 
 init();

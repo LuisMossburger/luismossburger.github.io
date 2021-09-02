@@ -24,7 +24,7 @@ class Visualization {
     this.color_light = "#3E4C65";
 
     this.filter_family = document.querySelector("#filterFamily"),
-    this.filter_persons = document.querySelector("#filterPersons"),
+    this.filter_persons = document.querySelector("#filterOthers"),
     this.filter_groups = document.querySelector("#filterGroups"),
     this.filters = [this.filter_family, this.filter_persons, this.filter_groups];
 
