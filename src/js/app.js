@@ -118,6 +118,7 @@ function registerAnimations() {
   // Initial animation
   window.addEventListener("load", function() {
     document.querySelector("#overlay h1").classList.add("placed");
+    document.querySelector("#overlay #overlayFooter").classList.add("placed");
   });
 
   // Parallax effect on start overlay

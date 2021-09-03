@@ -107,6 +107,12 @@ div#overlay div#overlayFooter {
   width: 100%;
   margin-top: 5em;
   text-align: center;
+  opacity: 0;
+  transition: all .7 ease-out;
+}
+
+div#overlay div#overlayFooter.placed {
+  opacity: 1;
 }
 
 div#overlay div#overlayFooter p {
@@ -189,6 +195,13 @@ header nav button:hover, header nav button:focus {
 header nav button#playButton:hover, header nav button#playButton:focus {
   color: #0F141A;
   background: #f4f4f5;
+}
+
+header a#searchButton img {
+  height: 1em;
+  margin: 0 0.3em;
+  margin-top: -2px;
+  vertical-align: middle;
 }
 
 
@@ -783,8 +796,7 @@ div.document p {
   line-height: 1.5;
 }
 
-#aboutWrapper p, #aboutWrapper a,
-#helpWrapper p, #helpWrapper a {
+#aboutWrapper * {
   color: #f4f4f5;
 }
 

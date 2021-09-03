@@ -484,10 +484,10 @@ class Visualization {
 
     years.append("p").html(function(d, i) {
 
-      if (d != 0 || ["0", "1803", "1819", "1828", "1842"].indexOf(yearsPerYear[i]) >= 0) {
+      if (d != 0 || ["0", "1798", "1803", "1819", "1828", "1842"].indexOf(yearsPerYear[i]) >= 0) {
         if (yearsPerYear[i] == 1842) {
           visibleYearLabelBefore = true;
-          return "<b>Year of Death</b> " + yearsPerYear[i];
+          return "<b>Death in Bennington</b> " + yearsPerYear[i];
         } else if (yearsPerYear[i] == 1819) {
           visibleYearLabelBefore = true;
           return "<b>Sermon 'Unitarian Christianity'</b> " + yearsPerYear[i];
@@ -500,6 +500,9 @@ class Visualization {
         } else if (yearsPerYear[i] == 1828) {
           visibleYearLabelBefore = true;
           return "<b>Sermon 'Likeness to God'</b> " + yearsPerYear[i];
+        } else if (yearsPerYear[i] == 1798) {
+          visibleYearLabelBefore = true;
+          return "<b>Graduation from Harvard</b> " + yearsPerYear[i];
         } else if (yearsPerYear[i] == 0) {
           visibleYearLabelBefore = true;
           return "Unknown";
