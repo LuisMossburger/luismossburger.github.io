@@ -597,10 +597,10 @@ class Visualization {
 
     if (name in this.wikis) {
       this.personTemplate.content.querySelector("p").innerHTML = this.wikis[name]["bio"];
-      this.personTemplate.content.querySelector("p").innerHTML += " <a href='" + this.wikis[name]["link"] + "'>More</a>";
+      this.personTemplate.content.querySelector("p").innerHTML += " <a href='" + this.wikis[name]["link"] + "' target='_blank'>More at Wikipedia</a>";
     } else {
       this.personTemplate.content.querySelector("p").innerHTML = this.wikis["unknown"]["bio"];
-      this.personTemplate.content.querySelector("p").innerHTML += " <a href='" + this.wikis["unknown"]["link"] + "'>Learn how</a>";
+      this.personTemplate.content.querySelector("p").innerHTML += " <a href='" + this.wikis["unknown"]["link"] + "' target='_blank'>Learn how</a>";
     }
 
 
