@@ -496,7 +496,7 @@ class Visualization {
         //  return "<b>Son Williams Birth</b> " + yearsPerYear[i];
         } else if (yearsPerYear[i] == 1803) {
           visibleYearLabelBefore = true;
-          return "<b>Preacher in Boston</b> " + yearsPerYear[i];
+          return "<b>Pastor in Boston</b> " + yearsPerYear[i];
         } else if (yearsPerYear[i] == 1828) {
           visibleYearLabelBefore = true;
           return "<b>Sermon 'Likeness to God'</b> " + yearsPerYear[i];
