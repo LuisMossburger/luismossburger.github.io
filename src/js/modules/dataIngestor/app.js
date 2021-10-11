@@ -1,3 +1,4 @@
+/** Class that reads the CSV file with letter metadata. */
 class DataIngestor {
 
   constructor() {
@@ -8,8 +9,11 @@ class DataIngestor {
     this.callback;
   }
 
+  /** Read the data, start a callback.
+   * @param callback Function to call when ready
+   */
   readData(callback) {
-     var that = this, // Helper for passing context
+     var that = this,
          xhttp = new XMLHttpRequest();
 
     this.callback = callback;
@@ -24,6 +28,9 @@ class DataIngestor {
       xhttp.send();
   }
 
+  /** Parse the ingested data.
+   * @param data The metadata about the letters
+   */
   parseData(data) {
     // Taken from https://gist.github.com/Jezternz/c8e9fafc2c114e079829974e3764db75
     const re = /(,|\r?\n|\r|^)(?:"([^"]*(?:""[^"]*)*)"|([^,\r\n]*))/gi;
@@ -41,6 +48,9 @@ class DataIngestor {
     this.transformToObject(result);
   }
 
+  /** Transform the CSV data into a JS object, then call the callback.
+   * @param csv CSV data
+   */
   transformToObject(csv) {
     var objectAll = {"nodes": [], "links": []},
         nodes = [],
@@ -104,6 +114,7 @@ class DataIngestor {
     this.callback();
   }
 
+  /** Return data basis of category 'family'. */
   setFamily() {
     var objectFamily = {"nodes": [], "links": []},
         tempNodes = [],
@@ -128,6 +139,7 @@ class DataIngestor {
     return objectFamily;
   }
 
+  /** Return data basis of category 'persons'. */
   setPersons() {
     var objectPersons = {"nodes": [], "links": []},
         tempNodes = [],
@@ -174,6 +186,7 @@ class DataIngestor {
     return objectPersons;
   }
 
+  /** Return data basis of category 'groups & organizations'. */
   setGroups() {
     var objectGroups = {"nodes": [], "links": []},
         tempNodes = [],

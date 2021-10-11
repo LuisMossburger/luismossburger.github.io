@@ -1,31 +1,18 @@
-import KeywordSearch from "./modules/keywordSearch/app.js";
 import Visualization from "./modules/visualization/app.js";
 
-const INCLUDE_KEYWORDSEARCH = false;
-const INCLUDE_FILTERS = false;
+var visualization,
+    yearsSlider,
+    playButton = document.querySelector("#playButton"),
 
-var keywordSearch,
-    visualization;
-
-var yearsSlider,
     animation = "stop",
     animationInterval,
     currentAnimationYear,
     maxAnimationYear;
 
-var keywordSearchTemplate = document.querySelector("#keywordSearchTemplate"),
-    filtersContainerTemplate = document.querySelector("#filtersContainerTemplate"),
-    filterTemplate = document.querySelector("#filterTemplate"),
-    playButton = document.querySelector("#playButton");
-
+/** Initializes the visualization interface. */
 function init() {
   visualization = new Visualization();
 
-  if (INCLUDE_KEYWORDSEARCH) {
-    include_keywordSearch(document.getElementById("include_keywordSearch"), keywordSearchTemplate);
-  }
-
-  // Register Popups
   document.querySelector("#aboutButton").addEventListener("click", function() {
     document.querySelector("#aboutWrapper").style.display = "initial";
   });
@@ -38,19 +25,7 @@ function init() {
   registerAnimations();
 }
 
-function include_keywordSearch(location, template) {
-  keywordSearch = new KeywordSearch(INCLUDE_FILTERS);
-  keywordSearch.include_keywordSearch(location, template);
-
-  if (INCLUDE_FILTERS && INCLUDE_KEYWORDSEARCH) {
-    include_filters();
-  }
-}
-
-function include_filters() {
-  keywordSearch.include_filterContainer(filtersContainerTemplate, filterTemplate);
-}
-
+/** Handles the life animation. */
 function playLife() {
 
   if (visualization.filtered != "all") {
@@ -59,9 +34,10 @@ function playLife() {
 
   yearsSlider = document.querySelector(".yearsSlider");
   maxAnimationYear = yearsSlider.getAttribute("max");
+
+  // Set listeners to stop the animation
   yearsSlider.addEventListener("input", function() {animation = "stop";});
   yearsSlider.addEventListener("change", function() {animation = "stop";});
-
   document.querySelector("#filterYear").addEventListener("click", function() {animation = "stop";});
   document.querySelector("#filterPersons").addEventListener("click", function() {animation = "stop";});
   document.querySelector("#filterFamily").addEventListener("click", function() {animation = "stop";});
@@ -73,6 +49,7 @@ function playLife() {
     currentAnimationYear = 1;
   }
 
+  // Actual handling of the play animation
   if (animation == "stop" || animation == "pause") {
     animation = "play";
     playButton.innerHTML = "&#10074;&#10074; &nbsp;Pause";
@@ -84,6 +61,7 @@ function playLife() {
   }
 }
 
+/** Handles one year of the life animation. */
 function playOneLifeYear() {
   yearsSlider = document.querySelector(".yearsSlider");
 
@@ -92,13 +70,13 @@ function playOneLifeYear() {
     yearsSlider.value = currentAnimationYear;
     visualization.renderLettersByYear(visualization.allYears[currentAnimationYear]);
 
-    // Start faster interval for empty years
+    // Start faster interval for years without content
     if (["1782", "1842", "1848", "1886"].includes(visualization.allYears[currentAnimationYear])) {
       clearInterval(animationInterval);
       animationInterval = setInterval(playOneLifeYear, 100)
     }
 
-    // Start slower interval for filled years
+    // Start slower interval for years with content
     if (["1802", "1846", "1884", "1898"].includes(visualization.allYears[currentAnimationYear])) {
       clearInterval(animationInterval);
       animationInterval = setInterval(playOneLifeYear, 800)
@@ -108,12 +86,14 @@ function playOneLifeYear() {
   }
 }
 
+/** Stops the life animation. */
 function stopLife() {
   animation = "stop";
   clearInterval(animationInterval);
   playButton.innerHTML = "&#9654; Play";
 }
 
+/** Initializes several animations. */
 function registerAnimations() {
   // Initial animation
   window.addEventListener("load", function() {
@@ -133,11 +113,14 @@ function registerAnimations() {
   document.querySelector("#overlay #arrowDown").addEventListener("click", revealVisualization);
 }
 
+/** Slides introductory screen upwards, reveals main visualization. */
 function revealVisualization() {
   document.querySelector("#overlay").classList.add("placed");
   setTimeout(function() {
     document.querySelector("#overlay").style.visibility = "hidden";
   }, 1500);
 }
+
+
 
 init();

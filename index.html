@@ -16,7 +16,6 @@
 </head>
 <body>
 
-  <!-- CONTENT -->
   <header>
     <a href="./"><h1>The Letters of <span>William Ellery Channing</span></h1></a>
     <nav>
@@ -71,13 +70,6 @@
       </div>
     </div>
 
-    <!--<div id="searchContainer">
-      <div id="include_keywordSearch"></div>
-      <div class="results">
-        <div class="resultsList"></div>
-      </div>
-    </div>-->
-
     <section class="documents">
       <h2>Browse all <span>letters</span></h2>
       <p class="explanation">Click on the image to read the letter.</p>
@@ -111,11 +103,6 @@
         </div>
         <button id="filterPersons"></button>
       </div>
-
-      <!--<div class="legend">
-        <h3>Stroke Intensity - Letter Amount</h3>
-        <div class="intensity"><div id="string"></div></div>
-      </div>-->
     </section>
 
     <section class="yearsSliderContainer">
@@ -125,43 +112,10 @@
         <input class="slider yearsSlider" type="range" min="0" max="0" value="0" step="1">
       </div>
     </section>
+
   </main>
 
-
-
   <!-- TEMPLATES -->
-  <template id="resultsItemTemplate">
-    <div class="resultsItem">
-      <h2 class="title"></h2>
-      <p class="author"></p>
-    </div>
-  </template>
-
-  <template id="keywordSearchTemplate">
-    <div class="search">
-      <input class="searchField" type="text" />
-      <button class="searchButton">Search</button>
-      <br /><p class="resultsMetadata"></p>
-    </div>
-  </template>
-
-  <template id="filtersContainerTemplate">
-    <div class="filters">
-      <div class="filtersHeader">
-        <h2>Filter</h2>
-      </div>
-      <div class="filtersContent">No filters available at the moment.</div>
-    </div>
-  </template>
-
-  <template id="filterTemplate">
-    <div class="filter">
-      <h3 class="filterHeader"></h3>
-      <button class="filterRemove">remove filter</button>
-      <ul class="filterContent"></ul>
-    </div>
-  </template>
-
   <template id="personTemplate">
     <div class="infoPerson" person-id="">
       <div class="imageContainer">
@@ -185,8 +139,6 @@
       </div>
     </div>
   </template>
-
-
 
   <!-- SCRIPTS -->
   <script src="https://d3js.org/d3.v7.min.js"></script>

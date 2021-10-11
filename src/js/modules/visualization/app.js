@@ -1,7 +1,12 @@
 import DataIngestor from "../dataIngestor/app.js";
 
+/** Base class for the visualization 'The Letters of William Ellery Channing'. */
 class Visualization {
 
+  /**
+   * Base for the visualization.
+   * @constructor
+   */
   constructor() {
 
     self = this;
@@ -9,14 +14,14 @@ class Visualization {
     this.radius = 200,
     this.width = (this.radius * 2) + 50,
     this.height = (this.radius * 2) + 50,
-    this.filtered = "all",
     this.numNodes,
     this.allYears;
 
-    this.filterPersons = [],
+    this.filtered = "all",
     this.filterYear = "",
-    this.filterPersonsButton = document.querySelector("button#filterPersons"),
-    this.filterYearButton = document.querySelector("button#filterYear");
+    this.filterPersons = []
+    this.filterYearButton = document.querySelector("button#filterYear"),
+    this.filterPersonsButton = document.querySelector("button#filterPersons");
 
     this.color_cyan = "#119da4",
     this.color_pink = "#E34A6F",
@@ -30,8 +35,8 @@ class Visualization {
 
     this.personsContainer = document.querySelector(".infoPersons"),
     this.personTemplate = document.querySelector("#personTemplate"),
-    this.documentsContainer = document.querySelector(".documentsContainer"),
-    this.documentTemplate = document.querySelector("#documentTemplate");
+    this.documentTemplate = document.querySelector("#documentTemplate"),
+    this.documentsContainer = document.querySelector(".documentsContainer");
 
     this.svg = d3
       .select("#visualization")
@@ -40,6 +45,7 @@ class Visualization {
     this.dataIngestor = new DataIngestor();
     this.dataIngestor.readData(this.init);
 
+    // Data about persons
     this.images = {
       "Channing, William Ellery": ["channingwilliamellery_child.jpg", "channingwilliamellery_teen.jpg", "channingwilliamellery_young.jpg", "channingwilliamellery.jpg", "channingwilliamellery_old.jpg"],
       "unknown": "unknown.png",
@@ -88,21 +94,20 @@ class Visualization {
     };
   }
 
-
+  /** Initializes the visualization. */
   init() {
-    // Use "self" here because of context problems when this function is
-    // passed as a callback
     self.setupFilters();
     self.changeData("all");
   }
 
+  /** Renders the basic visualization elements. */
   render() {
     this.data = this.sortNodes(this.data);
     this.numNodes = this.data["nodes"].length;
 
-    // Calculate positions for a circle structure
+    // Calculate positions for the circle structure
+    // (taken from http://bl.ocks.org/bycoffe/3404776)
     for (let i = 0; i < this.numNodes; i++) {
-      // Taken from: http://bl.ocks.org/bycoffe/3404776
       let angle = (i / (this.numNodes/2)) * Math.PI; // Calculate the angle at which the element will be placed.
       this.data["nodes"][i]["x"] =  (this.radius * Math.cos(angle)) + (this.width/2); // Calculate the x position of the element.
       this.data["nodes"][i]["y"] = (this.radius * Math.sin(angle)) + (this.width/2); // Calculate the y position of the element.
@@ -112,20 +117,13 @@ class Visualization {
     this.renderLetters();
   }
 
+  /** Sets up all content filters. */
   setupFilters() {
-    var that = this; // Helper to pass context
+    var that = this;
 
-    this.filter_family.addEventListener("click", function() {
-      that.changeData("family");
-    });
-
-    this.filter_groups.addEventListener("click", function() {
-      that.changeData("groups");
-    });
-
-    this.filter_persons.addEventListener("click", function() {
-      that.changeData("persons");
-    });
+    this.filter_family.addEventListener("click", function() { that.changeData("family");});
+    this.filter_groups.addEventListener("click", function() { that.changeData("groups");});
+    this.filter_persons.addEventListener("click", function() { that.changeData("persons");});
 
     this.filterYearButton.addEventListener("click", function() {
       document.querySelector(".yearsSlider").value = document.querySelector(".yearsSlider").max;
@@ -137,7 +135,10 @@ class Visualization {
     });
   }
 
-  // Function to retrieve the correctly aged image of a person
+  /** Retrieve the correctly aged image of a person.
+   *  @param person The persons name
+   *  @return Path to the image to use
+   */
   getAgedPicture(person) {
     // Check if there are aged images at all
     if (Array.isArray(this.images[person])) {
@@ -169,18 +170,27 @@ class Visualization {
     }
   }
 
-  // Function to color nodes according to content
+  /** Retrieve color depending on category of person.
+   *  @param nodeText Name of the node/person
+   *  @return Color of the category the person belongs to
+   */
   colorNodes(nodeText) {
     if (nodeText.includes("Channing") || nodeText.includes("Ellery,")) {
       return this.color_cyan;
-    } else if (nodeText.includes(", ") || nodeText.includes("Dr. Sprague") || nodeText.includes("Miss Parsons") || nodeText.includes("Ware") || nodeText.includes("[Unknown]")) {
+    } else if (nodeText.includes(", ") || nodeText.includes("Dr. Sprague") ||
+      nodeText.includes("Miss Parsons") || nodeText.includes("Ware") ||
+      nodeText.includes("[Unknown]")) {
       return this.color_yellow;
     } else {
       return this.color_pink;
     }
   }
 
-  // Check if current node has a connection
+  /** Return opacity value depending on if node connection exist.
+   *  @param node The node for which a connection should be found
+   *  @param links All existing connections
+   *  @return Opacity value
+   */
   findNodeConnection(node, links) {
     for (let i = 0; i < links.length; i++) {
       if ( (links[i]["source"][0] == node[0] && links[i]["source"][1] == node[1])
@@ -192,6 +202,10 @@ class Visualization {
     return "0.2";
   }
 
+  /** Sort nodes according to their category.
+   *  @param data Data set that contains the nodes
+   *  @return The data set with ordered nodes
+   */
   sortNodes(data) {
     var tempPersons = [],
         tempGroups = [],
@@ -211,47 +225,47 @@ class Visualization {
     return data;
   }
 
-  // Render Nodes
+  /** Render nodes of the central visualization. */
   renderNodes(links) {
-    var that = this; // Helper to pass context functions to d3
+    var that = this;
 
     var nodes = this.svg.selectAll("circle")
         .data(this.data["nodes"])
         .enter()
-          .append("circle") // One circle per element
+          .append("circle")
             .attr("r", 4)
             .attr("cx", function (d, i) { return d.x; })
             .attr("cy", function (d, i) { return d.y; })
             .attr("fill", function (d, i) { return that.colorNodes(d.id); });
 
-      nodes.attr("opacity", function (d, i) { return that.findNodeConnection([d.x, d.y], links);})
-            .append("svg:title") // Make tooltip for each circle
-              .text(function(d) { return d["id"]; });
+    nodes.attr("opacity", function (d, i) { return that.findNodeConnection([d.x, d.y], links);})
+          .append("svg:title")
+            .text(function(d) { return d["id"]; });
 
-      this.svg.selectAll("circle").on("click", function(e) {
-        that.renderLettersByPersons([e["target"].querySelector("title").innerHTML]);
-      });
+    this.svg.selectAll("circle").on("click", function(e) {
+      that.renderLettersByPersons([e["target"].querySelector("title").innerHTML]);
+    });
 
 
-      // Set animations
-      this.svg.selectAll("circle").on("mouseover", function(e) {
-        e["target"].setAttribute("r", "15");
-        e["target"].setAttribute("stroke", "rgb(43, 49, 59)");
-        e["target"].setAttribute("stroke-width", "15");
-      });
+    // Set animations
+    this.svg.selectAll("circle").on("mouseover", function(e) {
+      e["target"].setAttribute("r", "15");
+      e["target"].setAttribute("stroke", "rgb(43, 49, 59)");
+      e["target"].setAttribute("stroke-width", "15");
+    });
 
-      this.svg.selectAll("circle").on("mouseout", function(e) {
-        e["target"].setAttribute("r", "4");
-        e["target"].setAttribute("stroke", "transparent");
-        e["target"].setAttribute("stroke-width", "0px");
-      });
+    this.svg.selectAll("circle").on("mouseout", function(e) {
+      e["target"].setAttribute("r", "4");
+      e["target"].setAttribute("stroke", "transparent");
+      e["target"].setAttribute("stroke-width", "0px");
+    });
 
-      this.renderPersons();
+    this.renderPersons();
   }
 
-  // Render Connections
+  /** Render connections of the central visualization. */
   renderConnections() {
-    var that = this, // Context helper
+    var that = this,
         links = [],
         tempPositions = {},
         linkGen = d3.linkVertical();
@@ -306,8 +320,6 @@ class Visualization {
               return "Letters between " + d["creator"] + " and " + d["addressee"];
             });
 
-
-
     this.svg.selectAll("path").on("click", function(e) {
       that.renderLettersByPersons([e["target"].getAttribute("person1"), e["target"].getAttribute("person2")]);
     });
@@ -324,10 +336,15 @@ class Visualization {
     this.renderNodes(links); // render this second so nodes are on top
   }
 
+  /** Display the currently filtered year. */
   renderYear() {
     document.querySelector("#year").innerHTML = this.getYearDisplay();
   }
 
+  /** Retrieve proper text display for currently filtered year.
+   * @param year Currently filtered year
+   * @return Cleaned display text for year
+   */
   getYearDisplay(year = this.filterYear) {
     if (year === "0") {
       return "18??";
@@ -338,6 +355,9 @@ class Visualization {
     }
   }
 
+  /** Render all letters with year filter.
+   * @param year Currently filtered year
+   */
   renderLettersByYear(year) {
     if (year === undefined) {
       this.filterYearButton.innerHTML = this.getYearDisplay("");
@@ -347,8 +367,11 @@ class Visualization {
     this.renderLetters(this.filterPersons, year);
   }
 
+  /** Render all letters with person(s) filter.
+   * @param persons Currently filtered person(s)
+   */
   renderLettersByPersons(persons) {
-    var that = this, // Context helper
+    var that = this,
         oldAndNewFilterEqual = false;
 
     if ((persons.length == this.filterPersons.length) && persons.length != 0) {
@@ -378,6 +401,10 @@ class Visualization {
     }
   }
 
+  /** Render all letters with person(s) and year filter.
+   * @param persons Currently filtered person(s)
+   * @param year Currently filtered year
+   */
   renderLettersByBoth(persons, year) {
     if (year === undefined) {
       this.filterYearButton.innerHTML = this.getYearDisplay("");
@@ -391,12 +418,17 @@ class Visualization {
     this.renderTimeline();
   }
 
+  /** Render all letters with filters.
+   * @param persons Currently filtered person(s)
+   * @param year Currently filtered year
+   */
   renderLetters(persons = [], year = "") {
-    let that = this; // Context helper
+    let that = this;
 
     this.svg.selectAll("path")
         .attr("class", "letterOut");
 
+    // Set a timeout here to allow for a short fade out animation
     setTimeout(function() {
       that.svg.selectAll("circle").remove();
       that.svg.selectAll("path").remove();
@@ -404,13 +436,12 @@ class Visualization {
     }, 200);
   }
 
-
-  // Create year buttons
+  /** Create time slider (year filter). */
   setupYears() {
     var sliderContainer = document.querySelector(".yearsSliderInner"),
         yearsCount = {},
         years = [],
-        that = this; // Helper to pass context functions to d3
+        that = this;
 
     for (let i = 1780; i <= 1900; i++) {
       yearsCount[i] = 0;
@@ -439,6 +470,9 @@ class Visualization {
     this.showYearContent(yearsCount);
   }
 
+  /** Create bar chart above timeline.
+   * @param yearsCount Dict with amount of letters per year
+   */
   showYearContent(yearsCount) {
     var contentPerYear = Array.from(Object.values(yearsCount)),
         yearsPerYear = Array.from(Object.keys(yearsCount));
@@ -482,6 +516,7 @@ class Visualization {
 
     let visibleYearLabelBefore = false;
 
+    // Add some facts about William Ellery Channing's life above the timeline
     years.append("p").html(function(d, i) {
 
       if (d != 0 || ["0", "1798", "1803", "1819", "1828", "1842"].indexOf(yearsPerYear[i]) >= 0) {
@@ -491,9 +526,6 @@ class Visualization {
         } else if (yearsPerYear[i] == 1819) {
           visibleYearLabelBefore = true;
           return "<b>Sermon 'Unitarian Christianity'</b> " + yearsPerYear[i];
-        //} else if (yearsPerYear[i] == 1820) {
-        //  visibleYearLabelBefore = true;
-        //  return "<b>Son Williams Birth</b> " + yearsPerYear[i];
         } else if (yearsPerYear[i] == 1803) {
           visibleYearLabelBefore = true;
           return "<b>Pastor in Boston</b> " + yearsPerYear[i];
@@ -521,6 +553,7 @@ class Visualization {
     });
   }
 
+  /** Render persons connected to letters. */
   renderPersons() {
     var noImg = [],
         alreadyRenderedPersons = [],
@@ -535,7 +568,7 @@ class Visualization {
     // Render William Ellery Channing always
     this.renderPerson(0);
 
-    // Render other currently active filtered persons always
+    // Render other currently active filtered persons (except William)
     for (let i = 0; i < this.filterPersons.length; i++) {
       if (this.filterPersons[i] != "Channing, William Ellery") {
         this.renderPerson(0, this.filterPersons[i]);
@@ -562,9 +595,13 @@ class Visualization {
     }
   }
 
+  /** Render person.
+   * @param i Number of the person in the data
+   * @param id Name of the person (optional)
+   */
   renderPerson(i, id = "") {
     var that = this,
-        name = id; // Context helper
+        name = id;
 
     // If a person's name was transferred use that one,
     // if not, catch the name via the number
@@ -572,20 +609,24 @@ class Visualization {
       name = this.data["nodes"][i]["id"];
     }
 
-    // If person is dead put a cross before the name
+    // Render layout & name
     if (name in this.wikis && (this.wikis[name]["death"] < this.filterYear)) {
+      // Show if a person is dead...
       this.personTemplate.content.querySelector("h3").innerHTML = "&#128327; " + name + " (Deceased)";
     } else if (name in this.wikis && (this.wikis[name]["birth"] > this.filterYear)) {
+      // ...not yet born...
       this.personTemplate.content.querySelector("h3").innerHTML = "* " + name + " (Unborn)";
     } else {
+      // ...or render normally
       this.personTemplate.content.querySelector("h3").innerHTML = name;
     }
     this.personTemplate.content.querySelector(".infoPerson").setAttribute("person-id", name);
     this.personTemplate.content.querySelector(".imageContainer").style.borderColor = this.colorNodes(name);
 
+    // Render image
     if (name in this.images) {
       this.personTemplate.content.querySelector("img").setAttribute("src", "./src/img/persons/" + this.getAgedPicture(name));
-      // If person is not alive darken the picture
+      // If person is not alive (yet/anymore), darken the picture
       if (name in this.wikis && this.filterYear != 0 && (this.wikis[name]["death"] < this.filterYear || this.wikis[name]["birth"] > this.filterYear)) {
         this.personTemplate.content.querySelector("img").style.filter = "brightness(40%)";
       } else {
@@ -595,6 +636,7 @@ class Visualization {
       this.personTemplate.content.querySelector("img").setAttribute("src", "./src/img/persons/" + this.images["unknown"]);
     }
 
+    // Render Wikipedia information
     if (name in this.wikis) {
       this.personTemplate.content.querySelector("p").innerHTML = this.wikis[name]["bio"];
       this.personTemplate.content.querySelector("p").innerHTML += " <a href='" + this.wikis[name]["link"] + "' target='_blank'>More at Wikipedia</a>";
@@ -603,17 +645,20 @@ class Visualization {
       this.personTemplate.content.querySelector("p").innerHTML += " <a href='" + this.wikis["unknown"]["link"] + "' target='_blank'>Learn how</a>";
     }
 
-
+    // Add to container
     this.personsContainer.appendChild(document.importNode(personTemplate.content, true));
     document.querySelector('[person-id="' + name + '"] img').addEventListener("click", function() { that.renderLettersByPersons([name]); });
   }
 
+  /** Filter the letters.
+   * @param persons Currently filtered persons
+   * @param year Currently filtered year
+   */
   filterDocuments(persons = [], year = "") {
     var that = this, // Context helper
         docs = [],
         yearsContent = {};
 
-    // Set filters
     this.filterPersons = persons;
 
     if (year == "") {
@@ -665,6 +710,7 @@ class Visualization {
     this.renderConnections();
   }
 
+  /** Render the complete timeline. */
   renderTimeline() {
     var yearsCount = {};
 
@@ -716,6 +762,9 @@ class Visualization {
     this.showYearContent(yearsCount);
   }
 
+  /** Update the category filter for the whole interface.
+   * @param type Category filter that was set
+   */
   changeData(type) {
 
     if (type == "family" && this.filtered != type) {
